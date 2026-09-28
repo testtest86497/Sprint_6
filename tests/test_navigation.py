@@ -1,20 +1,23 @@
-from pages.base_page import BasePage
-
+from pages.main_page import MainPage
+import allure
+from data import Urls
 
 class TestNavigation:
 
+    @allure.title("Проверка навигации на главную страницу")
     def test_navigation_to_main_page(self, driver):
-        base_page = BasePage(driver)
-        base_page.accept_cookies()
-        base_page.click_on_order_button()
-        assert base_page.check_order_page_url()
-        base_page.click_on_logo()
-        assert base_page.check_main_page_url()
+        main_page = MainPage(driver)
+        main_page.click_on_order_button()
+        main_page.click_on_logo()
+        main_page.wait_for_url(Urls.MAIN_PAGE)
+        current = main_page.get_current_url()
+        assert current == Urls.MAIN_PAGE
 
-
+    @allure.title("Проверка навигации на страницу Yandex")
     def test_navigation_to_yandex(self, driver):
-        base_page = BasePage(driver)
-        base_page.accept_cookies()
-        base_page.click_on_yandex_logo()
-        base_page.switch_to_new_tab()
-        assert base_page.check_yandex_url()
+        main_page = MainPage(driver)
+        main_page.click_on_yandex_logo()
+        main_page.switch_to_new_tab()
+        main_page.wait_for_url(Urls.DZEN_PAGE_PATTERN)
+        current = main_page.get_current_url()
+        assert current == Urls.DZEN_PAGE_PATTERN
